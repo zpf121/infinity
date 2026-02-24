@@ -777,8 +777,11 @@ SearchExpr *HTTPSearch::ParseSearchExpr(std::string_view json_sv, HTTPStatus &ht
     auto child_expr = new std::vector<ParsedExpr *>();
     DeferFn defer_fn([&] {
         if (child_expr) {
-            for (const auto expr : *child_expr) {
-                delete expr;
+            for (auto expr : *child_expr) {
+                if (expr) {
+                    delete expr;
+                    expr = nullptr;
+                }
             }
             delete child_expr;
             child_expr = nullptr;
