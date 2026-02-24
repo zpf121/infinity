@@ -18,8 +18,10 @@ namespace infinity {
 SearchExpr::~SearchExpr() {
     if (exprs_ != nullptr) {
         for (auto &expr : *exprs_) {
-            delete expr;
-            expr = nullptr;
+            if (expr != nullptr) {
+                delete expr;
+                expr = nullptr;
+            }
         }
         delete exprs_;
         exprs_ = nullptr;
@@ -48,7 +50,7 @@ std::string SearchExpr::ToString() const {
     return oss.str();
 }
 
-void SearchExpr::SetExprs(std::vector<infinity::ParsedExpr *> *& exprs) {
+void SearchExpr::SetExprs(std::vector<infinity::ParsedExpr *> *&exprs) {
     if (exprs == nullptr) {
         ParserError("SearchExpr::SetExprs parameter is nullptr");
     }
